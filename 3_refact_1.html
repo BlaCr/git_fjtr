@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+    <h1>Рефакторинг.Задача №1</h1>
+    <p>Код</p>
+    <p>Что можно улучшить? Как бы вы его переписали?.</p>
+    
+    
+    <h2>Решение:</h2>
+    <p>Судя по коду, функция должна возвращать максимальную позицию одного из двух искомых символов в строке. Если не найдено ни одного или пустая строка - возвращать -1. Перебирает с конца строки.</p>
+    <h2>Недостатки:</h2>
+    <p>1. Слишком запутанный и избыточный код проверки условий. Достаточно было определить максимальный индекс.</p>
+    <p>2. Поскольку не интересует какой из символов был найден, нет смысла определять два индекса и вычислять максимум, достаточно просто найти последнюю позицию.</p>
+    <p>3. При переборе и проверке символов в цикле не учитывается и не проверяется 0 позиция (условие i > 0). Считаю багом, поскольку тогда проверяли бы не на пустую строку а на длину более 1.</p>
+    <p>4. При проверке на пустую строку (s.match(/^$/)) не учтены случаи не строковой переменной, undefined или null - вызовут ошибку. Если так задумано, сысла в проверке нет. Без нее особо ничего не изменится. Упадет по ошибке на s.length, а в случае пустой строки тело while и так не выполняется.</p>
+    <p>5. Прочее: кейс сенситивность, считаю фичей, не исправляю.</p>
+
+    <script>
+        "use strict";
+
+        //Мой вариант. Код сокращен. Поиск производится до 0 позиции включительно.
+        function func_r(s, a, b) {
+            let i = s.length -1;
+            let sIndex = -1;
+            while ((sIndex == -1) && (i >= 0)) {
+                if ((s.substring(i, i +1) == a) || (s.substring(i, i +1) == b)) {
+                    sIndex = i;
+                }                
+                i = i - 1;
+            }
+            return sIndex;
+        }
+
+        //исходный вариант
+        function func(s, a, b) {
+
+            if (s.match(/^$/)) {
+                return -1;
+            }
+
+            var i = s.length -1;
+            var aIndex =     -1;
+            var bIndex =     -1;
+
+            while ((aIndex == -1) && (bIndex == -1) && (i > 0)) {
+                if (s.substring(i, i +1) == a) {
+                    aIndex = i;
+                }
+                if (s.substring(i, i +1) == b) {
+                    bIndex = i;
+                }
+                i = i - 1;
+            }
+
+            if (aIndex != -1) {
+                if (bIndex == -1) {
+                    return aIndex;
+                }
+                else {
+                    return Math.max(aIndex, bIndex);
+                }
+            }
+
+            if (bIndex != -1) {
+                return bIndex;
+            }
+            else {
+                return -1;
+            }
+        }
+
+        // Проверка:
+        
+        console.log (func('cb___ab__', 'a', 'b')); //6 - b
+        console.log (func_r('cb___ab__', 'a', 'b')); //6 - b
+
+        console.log (func('cb___ab__', 'b', 'a')); //6 - b
+        console.log (func_r('cb___ab__', 'b', 'a')); //6 - b
+
+        console.log (func('cb___ab__', 'a', 'd')); //5 - a
+        console.log (func_r('cb___ab__', 'a', 'd')); //5 - a
+
+        console.log (func('', 'c', 'd')); //-1 пустая строка
+        console.log (func_r('', 'c', 'd')); //-1 пустая строка
+
+        console.log (func('cb___ab__', 'c', 'd')); //-1 с в нулевой позиции не найдено
+        console.log (func_r('cb___ab__', 'c', 'd')); //0 с в нулевой позиции найдено
+        
+        //при значении не строковом, например null или undefined - ошибка
+        //let s //undefined
+        //let s = null 
+        //console.log (func(s, 'c', 'd')); //падает по ошибке, если s не строка
+        //console.log (func_ref(s, 'c', 'd')); //падает по ошибке, если s не строка
+        
+  </script>
+
+  <p><b>Код сокращен. Поиск производится до 0 позиции включительно. Код ниже. Результат в консоли.</b></p>
+  
+  <pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-meta" style="color: rgb(31, 113, 153);">        "use strict"</span>;
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//Мой вариант. Код сокращен. Поиск производится до 0 позиции включительно.</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">func_r</span>(<span class="hljs-params">s, a, b</span>) </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> i = s.length <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> sIndex = <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+        <span class="hljs-keyword" style="font-weight: 700;">while</span> ((sIndex == <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>) &amp;&amp; (i &gt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>)) {
+            <span class="hljs-keyword" style="font-weight: 700;">if</span> ((s.substring(i, i +<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) == a) || (s.substring(i, i +<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) == b)) {
+                sIndex = i;
+            }                
+            i = i - <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>;
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">return</span> sIndex;
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//исходный вариант</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">func</span>(<span class="hljs-params">s, a, b</span>) </span>{
+
+        <span class="hljs-keyword" style="font-weight: 700;">if</span> (s.match(<span class="hljs-regexp" style="color: rgb(188, 96, 96);">/^$/</span>)) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+        }
+
+        <span class="hljs-keyword" style="font-weight: 700;">var</span> i = s.length <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+        <span class="hljs-keyword" style="font-weight: 700;">var</span> aIndex =     <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+        <span class="hljs-keyword" style="font-weight: 700;">var</span> bIndex =     <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+
+        <span class="hljs-keyword" style="font-weight: 700;">while</span> ((aIndex == <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>) &amp;&amp; (bIndex == <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>) &amp;&amp; (i &gt; <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>)) {
+            <span class="hljs-keyword" style="font-weight: 700;">if</span> (s.substring(i, i +<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) == a) {
+                aIndex = i;
+            }
+            <span class="hljs-keyword" style="font-weight: 700;">if</span> (s.substring(i, i +<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) == b) {
+                bIndex = i;
+            }
+            i = i - <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>;
+        }
+
+        <span class="hljs-keyword" style="font-weight: 700;">if</span> (aIndex != <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">if</span> (bIndex == <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>) {
+                <span class="hljs-keyword" style="font-weight: 700;">return</span> aIndex;
+            }
+            <span class="hljs-keyword" style="font-weight: 700;">else</span> {
+                <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-built_in" style="color: rgb(57, 115, 0);">Math</span>.max(aIndex, bIndex);
+            }
+        }
+
+        <span class="hljs-keyword" style="font-weight: 700;">if</span> (bIndex != <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> bIndex;
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">else</span> {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>;
+        }
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">// Проверка:</span>
+    
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//6 - b</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func_r(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//6 - b</span>
+
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//6 - b</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func_r(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//6 - b</span>
+
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//5 - a</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func_r(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//5 - a</span>
+
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func(<span class="hljs-string" style="color: rgb(136, 0, 0);">''</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'c'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//-1 пустая строка</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func_r(<span class="hljs-string" style="color: rgb(136, 0, 0);">''</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'c'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//-1 пустая строка</span>
+
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'c'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//-1 с в нулевой позиции не найдено</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (func_r(<span class="hljs-string" style="color: rgb(136, 0, 0);">'cb___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'c'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">//0 с в нулевой позиции найдено</span>
+    
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//при значении не строковом, например null или undefined - ошибка</span>
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//let s //undefined</span>
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//let s = null </span>
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//console.log (func(s, 'c', 'd')); //падает по ошибке, если s не строка</span>
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//console.log (func_ref(s, 'c', 'd')); //падает по ошибке, если s не строка</span></pre>
+
+</body>
+</html>

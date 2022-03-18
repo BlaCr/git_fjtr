@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+    <h1>Практические задачи. Задача №1</h1>
+    <p>Реализуйте функцию parseUrl(string), которая будет парсить URL строку и возвращать объект с распарсенными данными. Пример:</p>
+    <p>Желательно задачу решить как можно меньшим числом строк кода и затратив на реализацию минимум времени.</p>
+
+    <h2>Решение:</h2>
+    <p>Сделал на объекте URL. Потрачено несколько минут (в основном, на оформление).</p>
+    <p><b>Сделано. Результат в консоли. Код:</b></p>
+
+    <script>
+        "use strict";
+
+        //короткий и простой вариант
+        function parseUrl(str_url) {
+            return new URL(str_url);
+        }
+
+        let a = parseUrl('http://tutu.ru:8080/do/any.php?a=1&b[]=a&b[]=b#foo')
+
+        // Вернет объект, в котором будут следующие свойства:
+        console.log( a.href == "http://tutu.ru:8080/do/any.php?a=1&b[]=a&b[]=b#foo" )
+        console.log( a.hash == "#foo" )
+        console.log( a.port == "8080" )
+        console.log( a.host == "tutu.ru:8080" )
+        console.log( a.protocol == "http:" )
+        console.log( a.hostname == "tutu.ru" )
+        console.log( a.pathname == "/do/any.php" )
+        console.log( a.origin == "http://tutu.ru:8080" )
+                
+    </script>
+
+  <pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-meta" style="color: rgb(31, 113, 153);">        "use strict"</span>;
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//короткий и простой вариант</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">parseUrl</span>(<span class="hljs-params">str_url</span>) </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-keyword" style="font-weight: 700;">new</span> URL(str_url);
+    }
+
+    <span class="hljs-keyword" style="font-weight: 700;">let</span> a = parseUrl(<span class="hljs-string" style="color: rgb(136, 0, 0);">'http://tutu.ru:8080/do/any.php?a=1&amp;b[]=a&amp;b[]=b#foo'</span>)
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">// Вернет объект, в котором будут следующие свойства:</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.href == <span class="hljs-string" style="color: rgb(136, 0, 0);">"http://tutu.ru:8080/do/any.php?a=1&amp;b[]=a&amp;b[]=b#foo"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.hash == <span class="hljs-string" style="color: rgb(136, 0, 0);">"#foo"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.port == <span class="hljs-string" style="color: rgb(136, 0, 0);">"8080"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.host == <span class="hljs-string" style="color: rgb(136, 0, 0);">"tutu.ru:8080"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.protocol == <span class="hljs-string" style="color: rgb(136, 0, 0);">"http:"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.hostname == <span class="hljs-string" style="color: rgb(136, 0, 0);">"tutu.ru"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.pathname == <span class="hljs-string" style="color: rgb(136, 0, 0);">"/do/any.php"</span> )
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log( a.origin == <span class="hljs-string" style="color: rgb(136, 0, 0);">"http://tutu.ru:8080"</span> )</pre>
+
+</body>
+</html>

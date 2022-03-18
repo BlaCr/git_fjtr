@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+    <h1>Рефакторинг.Задача №2</h1>
+    <p>Код</p>
+    <p>Что можно улучшить? Как бы вы переписали функцию drawRating при условии что на вход функции drawRating должна приходить переменная vote, содержащая значение от 0 до 100. Интересует именно логика реализации функции, не визуальное отображение звезд.
+    </p>
+        
+    <h2>Недостатки:</h2>
+    <p>1. Не особо красивая конструкция из if. Но, в принципе, легко читаемая.</p>
+    <p>2. Странная система рейтинга  - даже при 0 - одна звезда. Ну, это от задания зависит.</p>
+    <p>3. Если всё-таки прилетит vote меньше 0 или больше 100 - значение функции будет undefined.</p>
+    <p>4. Если понадобится больше звезд - придется менять и дописывать условия.</p>
+
+    <h2>Решение:</h2>
+    <p>Сделал функцию вычисляющую нужное количество закрашенных звезд.</p>
+    <p>Можно регулировать количество звезд. vote меньше нуля и больше 100 тоже отработает (1 и 5 звезд).</p>
+    <p><b>Сделано. Код ниже. Результат в консоли.</b></p>
+
+    <script>
+        "use strict";
+
+        //Мой вариант. Можно регулировать количество звезд. vote меньше нуля и больше 100 тоже отработает (1 и 5 звезд)
+        function drawRating_r(vote) {
+            const maxstar = 5; //максимальное количество звезд - можно увеличить
+            let i = parseInt((vote - 1) / (100 / maxstar)) + 1;
+            i = (i < 1) ? 1 : i;
+            i = (i > maxstar) ? maxstar : i;
+            return '★'.repeat(i) + '☆'.repeat(maxstar - i);
+        }
+
+        //исходный вариант
+        function drawRating(vote) {
+            if (vote >= 0 && vote <= 20) {
+                return '★☆☆☆☆';
+            }
+            else if (vote > 20 && vote <= 40) {
+                return '★★☆☆☆';
+            }
+            else if (vote > 40 && vote <= 60) {
+                return '★★★☆☆';
+            }
+            else if (vote > 60 && vote <= 80) {
+                return '★★★★☆';
+            }
+            else if (vote > 80 && vote <= 100) {
+                return '★★★★★';
+            }
+        }
+
+        // Проверка работы результата
+        console.log('drawRating:')
+        console.log(drawRating(0) ); // ★☆☆☆☆
+        console.log(drawRating(1) ); // ★☆☆☆☆
+        console.log(drawRating(50)); // ★★★☆☆
+        console.log(drawRating(99)); // ★★★★★
+        console.log(drawRating(150)); // undefined
+        console.log(drawRating(-1212150)); // undefined
+        
+        console.log('drawRating_r:')
+        console.log(drawRating_r(0)); // ★☆☆☆☆
+        console.log(drawRating_r(1) ); // ★☆☆☆☆
+        console.log(drawRating_r(50)); // ★★★☆☆
+        console.log(drawRating_r(99)); // ★★★★★
+        console.log(drawRating_r(150)); // ★★★★★  прокатит
+        console.log(drawRating_r(-1212150)); // ★☆☆☆☆  прокатит тоже
+        
+    </script>
+
+  <pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-meta" style="color: rgb(31, 113, 153);">"use strict"</span>;
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//Мой вариант. Можно регулировать количество звезд. vote меньше нуля и больше 100 тоже отработает (1 и 5 звезд)</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">drawRating_r</span>(<span class="hljs-params">vote</span>) </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">const</span> maxstar = <span class="hljs-number" style="color: rgb(136, 0, 0);">5</span>; <span class="hljs-comment" style="color: rgb(136, 136, 136);">//максимальное количество звезд - можно увеличить</span>
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> i = <span class="hljs-built_in" style="color: rgb(57, 115, 0);">parseInt</span>((vote - <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) / (<span class="hljs-number" style="color: rgb(136, 0, 0);">100</span> / maxstar)) + <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>;
+        i = (i &lt; <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) ? <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span> : i;
+        i = (i &gt; maxstar) ? maxstar : i;
+        <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'★'</span>.repeat(i) + <span class="hljs-string" style="color: rgb(136, 0, 0);">'☆'</span>.repeat(maxstar - i);
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//исходный вариант</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">drawRating</span>(<span class="hljs-params">vote</span>) </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">if</span> (vote &gt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span> &amp;&amp; vote &lt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">20</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'★☆☆☆☆'</span>;
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">else</span> <span class="hljs-keyword" style="font-weight: 700;">if</span> (vote &gt; <span class="hljs-number" style="color: rgb(136, 0, 0);">20</span> &amp;&amp; vote &lt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">40</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'★★☆☆☆'</span>;
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">else</span> <span class="hljs-keyword" style="font-weight: 700;">if</span> (vote &gt; <span class="hljs-number" style="color: rgb(136, 0, 0);">40</span> &amp;&amp; vote &lt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">60</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'★★★☆☆'</span>;
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">else</span> <span class="hljs-keyword" style="font-weight: 700;">if</span> (vote &gt; <span class="hljs-number" style="color: rgb(136, 0, 0);">60</span> &amp;&amp; vote &lt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">80</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'★★★★☆'</span>;
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">else</span> <span class="hljs-keyword" style="font-weight: 700;">if</span> (vote &gt; <span class="hljs-number" style="color: rgb(136, 0, 0);">80</span> &amp;&amp; vote &lt;= <span class="hljs-number" style="color: rgb(136, 0, 0);">100</span>) {
+            <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'★★★★★'</span>;
+        }
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">// Проверка работы результата</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(<span class="hljs-string" style="color: rgb(136, 0, 0);">'drawRating:'</span>)
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating(<span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>) ); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★☆☆☆☆</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating(<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) ); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★☆☆☆☆</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating(<span class="hljs-number" style="color: rgb(136, 0, 0);">50</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★★★☆☆</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating(<span class="hljs-number" style="color: rgb(136, 0, 0);">99</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★★★★★</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating(<span class="hljs-number" style="color: rgb(136, 0, 0);">150</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// undefined</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating(<span class="hljs-number" style="color: rgb(136, 0, 0);">-1212150</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// undefined</span>
+    
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(<span class="hljs-string" style="color: rgb(136, 0, 0);">'drawRating_r:'</span>)
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating_r(<span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★☆☆☆☆</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating_r(<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>) ); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★☆☆☆☆</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating_r(<span class="hljs-number" style="color: rgb(136, 0, 0);">50</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★★★☆☆</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating_r(<span class="hljs-number" style="color: rgb(136, 0, 0);">99</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★★★★★</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating_r(<span class="hljs-number" style="color: rgb(136, 0, 0);">150</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★★★★★  прокатит</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(drawRating_r(<span class="hljs-number" style="color: rgb(136, 0, 0);">-1212150</span>)); <span class="hljs-comment" style="color: rgb(136, 136, 136);">// ★☆☆☆☆  прокатит тоже</span></pre>
+
+</body>
+</html>

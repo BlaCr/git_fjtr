@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+    <h1>Fizz-buzz задачи. Задача №1</h1>
+    <p>Написать функцию dscount, которая подсчитывает количество идущих подряд символов s1 и s2 в строке, без учёта регистра. Функция должна пройти следующие тесты, как минимум:</p>
+
+    <script>
+        "use strict";
+
+        // Yor code here ...
+        //второй вариант прошел все тесты
+        function dscount(str, s1, s2) {
+            let re = new RegExp(s1 + s2, "gi");
+            let cnt = 0 
+            let rslt;
+            while (rslt = re.exec(str)) {
+                cnt = cnt + 1;
+                //console.log(`В строке ${str}: ${rslt[0]} найдено на позиции ${rslt.index}`);
+                re.lastIndex = rslt.index + 1;      //Далее ищем со следующей позиции         
+            }
+            return cnt;
+        }
+
+        // Для удобства можно использовать эти тесты:
+        try {
+            test(dscount, ['ab___ab__', 'a', 'b'], 2);
+            test(dscount, ['___cd____', 'c', 'd'], 1);
+            test(dscount, ['de_______', 'd', 'e'], 1);
+            test(dscount, ['12_12__12', '1', '2'], 3);
+            test(dscount, ['_ba______', 'a', 'b'], 0);
+            test(dscount, ['_a__b____', 'a', 'b'], 0);
+            test(dscount, ['-ab-аb-ab', 'a', 'b'], 2);
+            test(dscount, ['aAa', 'a', 'a'], 2);
+
+            console.info("Congratulations! All tests passed.");
+        } catch(e) {
+            console.error(e);
+        }
+
+        // Простая функция тестирования
+        function test(call, args, count, n) {
+            let r = (call.apply(n, args) === count);
+            console.assert(r, `Found items count: ${count}`);
+            if (!r) throw "Test failed!";
+        }
+  </script>
+
+  <p><b>Сделано. Код ниже. Результат в консоли.</b></p>
+  
+  <pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-meta" style="color: rgb(31, 113, 153);">        "use strict"</span>;
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">// Yor code here ...</span>
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//второй вариант прошел все тесты</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">dscount</span>(<span class="hljs-params">str, s1, s2</span>) </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> re = <span class="hljs-keyword" style="font-weight: 700;">new</span> <span class="hljs-built_in" style="color: rgb(57, 115, 0);">RegExp</span>(s1 + s2, <span class="hljs-string" style="color: rgb(136, 0, 0);">"gi"</span>);
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> cnt = <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span> 
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> rslt;
+        <span class="hljs-keyword" style="font-weight: 700;">while</span> (rslt = re.exec(str)) {
+            cnt = cnt + <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>;
+            <span class="hljs-comment" style="color: rgb(136, 136, 136);">//console.log(`В строке ${str}: ${rslt[0]} найдено на позиции ${rslt.index}`);</span>
+            re.lastIndex = rslt.index + <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>;      <span class="hljs-comment" style="color: rgb(136, 136, 136);">//Далее ищем со следующей позиции         </span>
+        }
+        <span class="hljs-keyword" style="font-weight: 700;">return</span> cnt;
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">// Для удобства можно использовать эти тесты:</span>
+    <span class="hljs-keyword" style="font-weight: 700;">try</span> {
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'ab___ab__'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">2</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'___cd____'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'c'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'de_______'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'d'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'e'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'12_12__12'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'1'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'2'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">3</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'_ba______'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'_a__b____'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'-ab-аb-ab'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'b'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">2</span>);
+        test(dscount, [<span class="hljs-string" style="color: rgb(136, 0, 0);">'aAa'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'a'</span>], <span class="hljs-number" style="color: rgb(136, 0, 0);">2</span>);
+
+        <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.info(<span class="hljs-string" style="color: rgb(136, 0, 0);">"Congratulations! All tests passed."</span>);
+    } <span class="hljs-keyword" style="font-weight: 700;">catch</span>(e) {
+        <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.error(e);
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">// Простая функция тестирования</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">test</span>(<span class="hljs-params">call, args, count, n</span>) </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">let</span> r = (call.apply(n, args) === count);
+        <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.assert(r, <span class="hljs-string" style="color: rgb(136, 0, 0);">`Found items count: <span class="hljs-subst" style="color: rgb(68, 68, 68);">${count}</span>`</span>);
+        <span class="hljs-keyword" style="font-weight: 700;">if</span> (!r) <span class="hljs-keyword" style="font-weight: 700;">throw</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">"Test failed!"</span>;
+    }</pre>
+
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+<body>
+
+    <h1>Алгоритмы. Задача №1</h1>
+    <p>1. Есть 2 сковороды для оладьев, каждая из которых вмещает ровно по 1 блинчику за 1 раз.</p>
+    <p>2. Есть 3 панкейка (блинчика), которые надо пожарить.</p>
+    <p>3. За 1 минуту жарится 1 сторона блинчика.</p>
+    <p>4. Блинчики надо обжарить с 2х сторон.</p>
+    <p>Итерацией считать процесс жарки 1й стороны 2х блинчиков на 2х сковородах. Сколько нужно времени (итераций) при оптимальном распределении чтобы пожарить 3 панкейка?</p>
+        
+    <p>Релизуйте ваш алгоритм в виде кода. Это может быть как ООП код, так и функциональный и даже процедурный. Выбор подхода обоснуйте.</p>
+        
+    <p>Обязательно опишите алгоритм, как бы вы решали эту задачу в физическом мире (в какой момент и как жарили бы эти блинчики).      
+    </p>
+
+    <h2>Решение:</h2>
+    <p>Критерий оптимизации - время, минимальное количество итераций.</p>
+    <p>3 панкейка по 2 стороны (итого 6 сторон)/поделить на 2 сковороды = минимум 3 итерации (3 минуты без учета доп. операций).</p>
+    
+    <h2>Алгоритм в реальном мире:</h2>
+    <p>кладем первые 2 панкейка на сковороды</p>
+    <p>1 итерация: Жарим минуту первые 2 панкейка на одной стороне</p>
+    <p>один панкейк переворачиваем, второй (наполовину пожаренный) откладываем, кладем оставшийся, не обработанный</p>
+    <p>2 итерация: Жарим минуту</p>
+    <p>готовый панкейк выкладываем, на его место кладем отложенный (полуготовый), на второй сковороде панкейк переворачиваем.</p>
+    <p>3 итерация: Жарим минуту</p>
+    <p>Готово. Выкладываем.</p>
+
+    <h2>Обоснование подхода:</h2>
+    <p>Поскольку сущность панкейк обладает несколькими свойствами (2 стороны, степень готовности и т.п.), считаю, что для его моделирования удобнее использовать объектный подход.</p>
+    <p>Это позволит упростить поддержку и доработку за счет наглядности структуры и инкапсуляции поддерживаемых методов обработки.</p>
+    <p>Объект панкейк в этом случае может иметь:</p>
+    <p>свойства: идентификатор, сторона1 (логический false - не обработана, true - обработана), сторона2 (аналогично), статус (не готов, полуготов, готов).</p>
+    <p>методы: перевернуть, поджарить с одной стороны.</p>
+    <p>Поджаривание на 2-х сковородах в этом случае может быть функцией с двумя агрументами (объектами класса панкейк).</p>
+
+    <script>
+        "use strict";
+
+        class Pkobj {
+            constructor(id) {
+                this.id = id;   //идентификатор панкейка
+                this.side1 = false; //1 (нижняя) сторона
+                this.side2 = false; //2 (верхняя) сторона 
+            }
+            fry() {
+                this.side1 = true; //жарит панкейк с нижней стороны, может вызываться сковородой
+            }
+            rotate() {
+                [this.side1, this.side2] = [this.side2, this.side1]; //переворачиват панкейк
+            }
+            get status() {          //геттер статуса 
+                if (this.side1 && this.side2) return 'Готов'
+                else if (this.side1 || this.side2) return 'Полуготов'
+                else return 'Не готов'
+            }
+        }
+        
+        //функция жарит на 2 сковородах 2 панкейка с нижней стороны
+        function fry_2pk(p1, p2) {
+            p1.fry();
+            p2.fry();
+        }
+
+        //функция вывода информации о состоянии панкейков в аргументах вызова
+        function info_pk(info) {
+            console.log(info);
+            for (var i = 1; i < arguments.length; i++) {
+                console.log('Панкейк ' + arguments[i].id +': ' + arguments[i].status);
+            }
+        }
+
+        //проверка. Начинаем готовить
+        //создадим 3 панкейка
+        let pk1 = new Pkobj(1);
+        let pk2 = new Pkobj(2);
+        let pk3 = new Pkobj(3);
+
+        //выведем информацию по созданным объектам
+        console.log(JSON.stringify(pk1), JSON.stringify(pk2), JSON.stringify(pk3));
+        info_pk('Начальное состояние:', pk1, pk2, pk3);
+
+        //1 итерация жарим первые 2 
+        fry_2pk(pk1,pk2);
+        info_pk('1 итерация выполнена:', pk1, pk2, pk3);
+        //переворачиваем 1, пока откладываем 2
+        pk1.rotate();
+        //2 итерация жарим 1 и 3
+        fry_2pk(pk1,pk3);
+        info_pk('2 итерация выполнена:', pk1, pk2, pk3);
+        //переворачиваем 2 и 3 
+        pk2.rotate();
+        pk3.rotate();
+        //3 итерация - жарим 2 и 3
+        fry_2pk(pk2,pk3);
+        info_pk('3 итерация выполнена:', pk1, pk2, pk3);
+
+        //Готово. Смотрим результат
+        console.log ('Объекты:', pk1, pk2, pk3);
+  </script>
+
+<p><b>Сделано. Код ниже. Результат в консоли.</b></p>
+
+<pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-meta" style="color: rgb(31, 113, 153);">        "use strict"</span>;
+
+    <span class="hljs-class"><span class="hljs-keyword" style="font-weight: 700;">class</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">Pkobj</span> </span>{
+        <span class="hljs-keyword" style="font-weight: 700;">constructor</span>(id) {
+            <span class="hljs-keyword" style="font-weight: 700;">this</span>.id = id;   <span class="hljs-comment" style="color: rgb(136, 136, 136);">//идентификатор панкейка</span>
+            <span class="hljs-keyword" style="font-weight: 700;">this</span>.side1 = <span class="hljs-literal" style="color: rgb(120, 169, 96);">false</span>; <span class="hljs-comment" style="color: rgb(136, 136, 136);">//1 (нижняя) сторона</span>
+            <span class="hljs-keyword" style="font-weight: 700;">this</span>.side2 = <span class="hljs-literal" style="color: rgb(120, 169, 96);">false</span>; <span class="hljs-comment" style="color: rgb(136, 136, 136);">//2 (верхняя) сторона </span>
+        }
+        fry() {
+            <span class="hljs-keyword" style="font-weight: 700;">this</span>.side1 = <span class="hljs-literal" style="color: rgb(120, 169, 96);">true</span>; <span class="hljs-comment" style="color: rgb(136, 136, 136);">//жарит панкейк с нижней стороны, может вызываться сковородой</span>
+        }
+        rotate() {
+            [<span class="hljs-keyword" style="font-weight: 700;">this</span>.side1, <span class="hljs-keyword" style="font-weight: 700;">this</span>.side2] = [<span class="hljs-keyword" style="font-weight: 700;">this</span>.side2, <span class="hljs-keyword" style="font-weight: 700;">this</span>.side1]; <span class="hljs-comment" style="color: rgb(136, 136, 136);">//переворачиват панкейк</span>
+        }
+        get status() {          <span class="hljs-comment" style="color: rgb(136, 136, 136);">//геттер статуса </span>
+            <span class="hljs-keyword" style="font-weight: 700;">if</span> (<span class="hljs-keyword" style="font-weight: 700;">this</span>.side1 &amp;&amp; <span class="hljs-keyword" style="font-weight: 700;">this</span>.side2) <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'Готов'</span>
+            <span class="hljs-keyword" style="font-weight: 700;">else</span> <span class="hljs-keyword" style="font-weight: 700;">if</span> (<span class="hljs-keyword" style="font-weight: 700;">this</span>.side1 || <span class="hljs-keyword" style="font-weight: 700;">this</span>.side2) <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'Полуготов'</span>
+            <span class="hljs-keyword" style="font-weight: 700;">else</span> <span class="hljs-keyword" style="font-weight: 700;">return</span> <span class="hljs-string" style="color: rgb(136, 0, 0);">'Не готов'</span>
+        }
+    }
+    
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//функция жарит на 2 сковородах 2 панкейка с нижней стороны</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">fry_2pk</span>(<span class="hljs-params">p1, p2</span>) </span>{
+        p1.fry();
+        p2.fry();
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//функция вывода информации о состоянии панкейков в аргументах вызова</span>
+    <span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">function</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">info_pk</span>(<span class="hljs-params">info</span>) </span>{
+        <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(info);
+        <span class="hljs-keyword" style="font-weight: 700;">for</span> (<span class="hljs-keyword" style="font-weight: 700;">var</span> i = <span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>; i &lt; <span class="hljs-built_in" style="color: rgb(57, 115, 0);">arguments</span>.length; i++) {
+            <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(<span class="hljs-string" style="color: rgb(136, 0, 0);">'Панкейк '</span> + <span class="hljs-built_in" style="color: rgb(57, 115, 0);">arguments</span>[i].id +<span class="hljs-string" style="color: rgb(136, 0, 0);">': '</span> + <span class="hljs-built_in" style="color: rgb(57, 115, 0);">arguments</span>[i].status);
+        }
+    }
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//проверка. Начинаем готовить</span>
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//создадим 3 панкейка</span>
+    <span class="hljs-keyword" style="font-weight: 700;">let</span> pk1 = <span class="hljs-keyword" style="font-weight: 700;">new</span> Pkobj(<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>);
+    <span class="hljs-keyword" style="font-weight: 700;">let</span> pk2 = <span class="hljs-keyword" style="font-weight: 700;">new</span> Pkobj(<span class="hljs-number" style="color: rgb(136, 0, 0);">2</span>);
+    <span class="hljs-keyword" style="font-weight: 700;">let</span> pk3 = <span class="hljs-keyword" style="font-weight: 700;">new</span> Pkobj(<span class="hljs-number" style="color: rgb(136, 0, 0);">3</span>);
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//выведем информацию по созданным объектам</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log(<span class="hljs-built_in" style="color: rgb(57, 115, 0);">JSON</span>.stringify(pk1), <span class="hljs-built_in" style="color: rgb(57, 115, 0);">JSON</span>.stringify(pk2), <span class="hljs-built_in" style="color: rgb(57, 115, 0);">JSON</span>.stringify(pk3));
+    info_pk(<span class="hljs-string" style="color: rgb(136, 0, 0);">'Начальное состояние:'</span>, pk1, pk2, pk3);
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//1 итерация жарим первые 2 </span>
+    fry_2pk(pk1,pk2);
+    info_pk(<span class="hljs-string" style="color: rgb(136, 0, 0);">'1 итерация выполнена:'</span>, pk1, pk2, pk3);
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//переворачиваем 1, пока откладываем 2</span>
+    pk1.rotate();
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//2 итерация жарим 1 и 3</span>
+    fry_2pk(pk1,pk3);
+    info_pk(<span class="hljs-string" style="color: rgb(136, 0, 0);">'2 итерация выполнена:'</span>, pk1, pk2, pk3);
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//переворачиваем 2 и 3 </span>
+    pk2.rotate();
+    pk3.rotate();
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//3 итерация - жарим 2 и 3</span>
+    fry_2pk(pk2,pk3);
+    info_pk(<span class="hljs-string" style="color: rgb(136, 0, 0);">'3 итерация выполнена:'</span>, pk1, pk2, pk3);
+
+    <span class="hljs-comment" style="color: rgb(136, 136, 136);">//Готово. Смотрим результат</span>
+    <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (<span class="hljs-string" style="color: rgb(136, 0, 0);">'Объекты:'</span>, pk1, pk2, pk3);</pre>
+    
+</body>
+</html>
