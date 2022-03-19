@@ -10,7 +10,9 @@
     <p>Итерацией считать процесс жарки 1й стороны 2х блинчиков на 2х сковородах. Сколько нужно времени (итераций) при оптимальном распределении чтобы пожарить 3 панкейка?</p>
         
     <p>Релизуйте ваш алгоритм в виде кода. Это может быть как ООП код, так и функциональный и даже процедурный. Выбор подхода обоснуйте.</p>
-    <p>Обязательно опишите алгоритм, как бы вы решали эту задачу в физическом мире (в какой момент и как жарили бы эти блинчики).</p>
+        
+    <p>Обязательно опишите алгоритм, как бы вы решали эту задачу в физическом мире (в какой момент и как жарили бы эти блинчики).      
+    </p>
 
     <h2>Решение:</h2>
     <p>Критерий оптимизации - время, минимальное количество итераций.</p>
@@ -32,7 +34,65 @@
     <p>свойства: идентификатор, сторона1 (логический false - не обработана, true - обработана), сторона2 (аналогично), статус (не готов, полуготов, готов).</p>
     <p>методы: перевернуть, поджарить с одной стороны.</p>
     <p>Поджаривание на 2-х сковородах в этом случае может быть функцией с двумя агрументами (объектами класса панкейк).</p>
+    <p><b>Сделано. Код ниже. Результат в консоли.</b></p>
+    <br>
+    <h2>Другие подходы:</h2>
+    <p>Если точное моделирование объектов физического мира не требуется, в вычислительном сысле более эффективен подход к реализации данной задачи как простой обработки двумерного массива.</p>
+    <p>Это позволит легко обрабатывать большое количество подобных объектов.</p>
+    <p>так:</p>
 
+    <table border="1" cellpadding="1" cellspacing="1" style="width:500px">
+        <tbody>
+            <tr>
+                <td><strong>Блин №</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>2</strong></td>
+                <td><strong>3</strong></td>
+            </tr>
+            <tr>
+                <td><strong>сторона 1/ № итерации</strong></td>
+                <td><span style="background-color:#2ecc71">1</span></td>
+                <td><span style="background-color:#3498db">2</span></td>
+                <td><span style="background-color:#f1c40f">3</span></td>
+            </tr>
+            <tr>
+                <td><strong>сторона 2/ № итерации</strong></td>
+                <td><span style="background-color:#f1c40f">3</span></td>
+                <td><span style="background-color:#2ecc71">1</span></td>
+                <td><span style="background-color:#3498db">2</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>или так:</p>
+    <table border="1" cellpadding="1" cellspacing="1" style="width:500px">
+        <tbody>
+            <tr>
+                <td><strong>Блин №</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>2</strong></td>
+                <td><strong>3</strong></td>
+            </tr>
+            <tr>
+                <td><strong>сторона 1/ № итерации</strong></td>
+                <td><span style="background-color:#2ecc71">1</span></td>
+                <td><span style="background-color:#2ecc71">1</span></td>
+                <td><span style="background-color:#f1c40f">3</span></td>
+            </tr>
+            <tr>
+                <td><strong>сторона 2/ № итерации</strong></td>
+                <td><span style="background-color:#f1c40f">3</span></td>
+                <td><span style="background-color:#3498db">2</span></td>
+                <td><span style="background-color:#3498db">2</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <p>Если пойти дальше и представить промышленную обработку панкейков с обжаркой сразу с двух сторон 
+        (в физическом мире это тоже реализуемо использованием двух сковород, например с электроподогревом), 
+        то задача, в математическом плане, сводится вообще к примитивному одномерному циклу перебора по одному блину (FIFO).</p>
+    
     <script>
         "use strict";
 
@@ -98,7 +158,7 @@
         console.log ('Объекты:', pk1, pk2, pk3);
   </script>
 
-<p><b>Сделано. Код ниже. Результат в консоли.</b></p>
+
 
 <pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-meta" style="color: rgb(31, 113, 153);">        "use strict"</span>;
 
@@ -162,6 +222,6 @@
 
     <span class="hljs-comment" style="color: rgb(136, 136, 136);">//Готово. Смотрим результат</span>
     <span class="hljs-built_in" style="color: rgb(57, 115, 0);">console</span>.log (<span class="hljs-string" style="color: rgb(136, 0, 0);">'Объекты:'</span>, pk1, pk2, pk3);</pre>
-    
+
 </body>
 </html>
